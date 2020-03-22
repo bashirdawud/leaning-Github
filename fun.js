@@ -3,3 +3,9 @@ function multiply(num){
 }
 
 multiply(3);
+
+function number (num){
+	return num
+}
+
+number();
