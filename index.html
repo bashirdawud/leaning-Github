@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Covid-19 App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        header{
+            text-align: center;
+            font-size: 2.5em;
+            
+        }
+        #output{
+            width: 50px auto;
+
+        }
+        #button{
+            display: flex;
+            flex-direction: row;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="jumbotron mt-2">
+            COVID-19 APP
+        </header>
+
+        <div id="button">
+            <button id="countries" class="btn btn-primary mb-4 mr-2">Countries</button>
+            <button id="dayOne" class="btn btn-success mb-4 mr-2">Day One</button>
+            <button id="dayOneAllStatus" class="btn btn-success mb-4 mr-2">Day One All Status</button>
+            <button id="dayonelive" class="btn btn-warning mb-4 mr-2">Day One Live</button>
+            <button id="dayonetotal" class="btn btn-secondary mb-4 mr-2">Day One Total</button>
+            <button id="dayonetotalstatus" class="btn btn-info mb-4 mr-2">Day One All Total Status</button>
+        </div>
+
+        <div id="output" class="container">
+            
+        </div>
+
+
+
+        <script>
+            document.getElementById("countries").addEventListener('click', getCountries)
+            document.getElementById("dayOne").addEventListener('click', getDayOne)
+            document.getElementById("dayOneAllStatus").addEventListener('click', getDayOneAllStatus)
+            document.getElementById("dayonelive").addEventListener('click', getDayOneLive)
+            document.getElementById("dayonetotal").addEventListener('click', getDayOneTotal)
+            document.getElementById("dayonetotalstatus").addEventListener('click', getDayOneTotalStatus)
+
+            function getCountries() {
+                fetch('https://api.covid19api.com/countries')
+                .then((response) => response.json())
+                .then((data) => {
+                    
+                    let output = '<h2 class="mb-4">Country Datas</h2>'
+                    data.forEach((e) => {
+                        output += `
+                            <div class="card card-body mb-4">
+                            <p>${e.Country}</p>
+                            <p>${e.Slug}</p>
+                            <p>${e.ISO2}</p>
+                            </div>
+
+                        
+                        `
+                    })
+
+                    document.getElementById("output").innerHTML = output
+
+                })
+
+                .catch((err) => {console.log(err)})
+            }
+                function getDayOne() {
+                    fetch('https://api.covid19api.com/dayone/country/canada/status/confirmed')
+                    .then((response) => response.json())
+                    .then((dayone) => {
+                        console.log(dayone)
+                        console.log(typeof(dayone))
+                        let output = '<h2 class="mb-4">Day One</h2>'
+                        dayone.forEach((day) => {
+                           output += `
+                           <table class="table table-bordered">
+                            <tbody>
+                            <tr>
+                                <td>Country: ${day.Country}</td>
+                                <td>CountryCode: ${day.CountryCode}</td>
+                                <td>Latitude: ${day.Lat}</td>
+                                <td>Longitude: ${day.Lon}</td>
+                                <td>Cases: ${day.Cases}</td>
+                                <td>Status: ${day.Status}</td>
+                                <td>Date: ${day.Date}</td>
+                            </tr>
+                            </tbody>
+                            </table>
+
+                           
+                           `
+                        })
+                        document.getElementById("output").innerHTML = output
+                        
+                    })
+                    .catch((err) => { console.log(err) })
+                }
+
+                function getDayOneAllStatus() {
+                    fetch('https://api.covid19api.com/dayone/country/nigeria')
+                    .then((response) => response.json())
+                    .then((dayOneAll) => {
+                        let output = '<h3>Day One All Status</h3>'
+                        dayOneAll.forEach((dayOneAllStat) => {
+                            output += `
+                            <table class="table table-bordered">
+                            <tbody>
+                            <tr>
+                                <td>Country: ${dayOneAllStat.Country}</td>
+                                <td>CountryCode: ${dayOneAllStat.CountryCode}</td>
+                                <td>Latitude: ${dayOneAllStat.Province}</td>
+                                <td>Longitude: ${dayOneAllStat.City}</td>
+                                <td>Cases: ${dayOneAllStat.CityCode}</td>
+                                <td>Status: ${dayOneAllStat.Lat}</td>
+                                <td>Date: ${dayOneAllStat.Lon}</td>
+                                <td>Date: ${dayOneAllStat.Confirmed}</td>
+                                <td>Date: ${dayOneAllStat.Deaths}</td>
+                                <td>Date: ${dayOneAllStat.Recovered}</td>
+                                <td>Date: ${dayOneAllStat.Active}</td>
+                                <td>Date: ${dayOneAllStat.Date}</td>
+                            </tr>
+                            </tbody>
+                            </table>
+                                
+                            
+                            `
+                        })
+                        document.getElementById("output").innerHTML = output
+                    })
+                    .catch((err) => {console.log(err)})
+                }
+
+                function getDayOneLive() {
+                    fetch('https://api.covid19api.com/dayone/country/south-africa/status/confirmed/live')
+                    .then((response) => response.json())
+                    .then((dayonelive) => {
+                        let output = '<h2>Day One Live</h2>'
+                        dayonelive.forEach((data) => {
+                            output += `
+                            <table class="table table-bordered">
+                            <tbody>
+                            <tr>
+                                <td>Country: ${data.Country}</td>
+                                <td>CountryCode: ${data.CountryCode}</td>
+                                <td>Latitude: ${data.Province}</td>
+                                <td>Longitude: ${data.City}</td>
+                                <td>Cases: ${data.CityCode}</td>
+                                <td>Status: ${data.Lat}</td>
+                                <td>Date: ${data.Lon}</td>
+                                <td>Date: ${data.Cases}</td>
+                                <td>Date: ${data.Status}</td>
+                                <td>Date: ${data.Date}</td>
+                            
+                            </tr>
+                            </tbody>
+                            </table>
+                            
+                            `
+                        })
+                        document.getElementById("output").innerHTML = output
+                    })
+                    .catch((err) => console.log(err))
+                }
+
+                function getDayOneTotal() {
+                    fetch('https://api.covid19api.com/total/dayone/country/nigeria/status/confirmed')
+                    .then((response) => response.json())
+                    .then((dayonetotal) => {
+                        let output = '<h2>Day One Total</h2>'
+                        dayonetotal.forEach((data) => {
+                            output += `
+                            <table class="table table-bordered">
+                            <tbody>
+                            <tr>
+                                <td>Country: ${data.Country}</td>
+                                <td>CountryCode: ${data.CountryCode}</td>
+                                <td>Latitude: ${data.Province}</td>
+                                <td>Longitude: ${data.City}</td>
+                                <td>Cases: ${data.CityCode}</td>
+                                <td>Status: ${data.Lat}</td>
+                                <td>Date: ${data.Lon}</td>
+                                <td>Date: ${data.Cases}</td>
+                                <td>Date: ${data.Status}</td>
+                                <td>Date: ${data.Date}</td>
+                            
+                            </tr>
+                            </tbody>
+                            </table>
+                            
+                            `
+                        })
+                        document.getElementById("output").innerHTML = output
+                    })
+                    .catch((err) => console.log(err))
+                }
+
+
+                function getDayOneTotalStatus() {
+                    fetch('https://api.covid19api.com/total/dayone/country/south-africa')
+                    .then((response) => response.json())
+                    .then((dayonetotalstatus) => {
+                        let output = '<h2>Day One Total All Status</h2>'
+                        dayonetotalstatus.forEach((data) => {
+                            output += `
+                            <table class="table table-bordered">
+                            <tbody>
+                            <tr>
+                                <td>Country: ${data.Country}</td>
+                                <td>CountryCode: ${data.CountryCode}</td>
+                                <td>Latitude: ${data.Province}</td>
+                                <td>Longitude: ${data.City}</td>
+                                <td>Cases: ${data.CityCode}</td>
+                                <td>Status: ${data.Lat}</td>
+                                <td>Date: ${data.Lon}</td>
+                                <td>Date: ${data.Confirmed}</td>
+                                <td>Date: ${data.Deaths}</td>
+                                <td>Date: ${data.Recovered}</td>
+                                <td>Date: ${data.Active}</td>
+                                <td>Date: ${data.Date}</td>
+                            
+                            </tr>
+                            </tbody>
+                            </table>
+                            
+                            `
+                        })
+                        document.getElementById("output").innerHTML = output
+                    })
+                    .catch((err) => console.log(err))
+                }
+
+
+
+            
+        </script>
+    </div>
+</body>
+</html>
